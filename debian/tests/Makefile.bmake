@@ -1,0 +1,5 @@
+.include <prog.mk>
+
+sanity:
+	[ "${unix}" = "We run ${OS}." ]
+	[ "${DOCDIR}" = /usr/share/doc ]

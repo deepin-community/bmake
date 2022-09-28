@@ -1,0 +1,5 @@
+#!/bin/sh
+
+: ${testdir:=$PWD/debian/tests}
+
+bmake -f $testdir/Makefile.bmake sanity

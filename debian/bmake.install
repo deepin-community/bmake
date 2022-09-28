@@ -1,0 +1,4 @@
+bmake debian/mkdep debian/pmake usr/bin
+debian/mk/* usr/share/bmake/mk-netbsd/
+mk/* usr/share/bmake/mk-bmake/
+debian/bmake.pm debian/pmake.pm usr/share/perl5/Debian/Debhelper/Buildsystem/

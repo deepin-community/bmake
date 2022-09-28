@@ -1,0 +1,165 @@
+This is the Debian GNU/Linux prepackaged version of 4.4BSD make (pmake).
+
+This package was put together by James Troup <james@nocrew.org>, from
+sources obtained from:
+ ftp.netbsd.org:/pub/NetBSD-current/src/usr.bin/make/
+ ftp.openbsd.org:/pub/OpenBSD/src/usr.bin/mkdep/
+ ftp.netbsd.org:/pub/NetBSD-current/src/share/mk/
+This package was rebuilt by Sam Hocevar <sam@zoy.org> from the NetBSD
+CVS tree available from:
+ cvs://anoncvs@anoncvs.NetBSD.org:/cvsroot (module /src/usr.bin/make/)
+
+Changes:
+ o added Debian GNU/Linux package maintenance system files.
+ o var.c: #include <stdio.h> because <regex.h> needs it.
+ o util.c: don't try to redefine libc functions by #ifndefing a large
+           chunk on (__linux__).
+ o mk/bsd.doc.mk: don't give groff explicit macro paths; instead let it work
+                  them out for itself.
+ o mk/bsd.lib.mk: added a machine definition "debian" for Debian GNU/Linux.
+ o mk/bsd.man.mk: correct CATDEPS, Herbet Xu <herbert@gondor.apana.org.au>.
+ o mk/bsd.own.mk: change MANDIR and DOCDIR to reflect the FSSTND
+                  orientated Debian GNU/Linux directory structure
+                  (i.e. /usr/share/* -> /usr/*).
+ o mk/bsd.own.mk: s/wheel/root/g.
+ o mk/bsd.own.mk: define MANZ.
+ o mk/bsd.own.mk: don't make files unwritable by owner.
+ o mk/bsd.prog.mk: undefine LIBCRT0.
+ o mk/sys.mk: MAKE should be pmake and not make on Debian GNU/Linux.
+ o mk/sys.mk: tsort from bsdmainutils doesn't accept -q as an argument, 
+              so don't try to pass it.
+
+Modifications for Debian Copyright (C) 1997,1998 James Troup.
+			 Copyright (C) 1999 Edward Brocklesby.
+			 Copyright (C) 2003,2004 Sam Hocevar.
+
+Package files unless otherwise noted are copyright:
+
+ * Copyright (c) 1987-1995 The Regents of the University of California.
+ * Copyright (c) 1988, 1989 by Adam de Boor
+ * Copyright (c) 1989 by Berkeley Softworks
+   This code is derived from software contributed to Berkeley by
+   Adam de Boor.
+
+and are covered by the BSD-4 license as follows:
+
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. All advertising materials mentioning features or use of this software
+ *    must display the following acknowledgement:
+ *	This product includes software developed by the University of
+ *	California, Berkeley and its contributors.
+ * 4. Neither the name of the University nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ */
+
+Files for.c, meta.h, pathnames.h, realpath.c, stresep.c, strlist.c, strlist.h
+are copyright:
+
+ * Copyright (c) 1989, 1990, 1992, 1993, 1995 The Regents of the University of California.
+ * Copyright (c) 2009-2010, Juniper Networks, Inc.
+ * Copyright (c) 2008-2009 The NetBSD Foundation, Inc.
+   This code is derived from software contributed to The NetBSD Foundation
+   by David Laight.
+
+and are covered by the BSD-3 license as follows:
+
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the University nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+
+Files dirname.c, make_malloc.c, make_malloc.h, meta.c, trace.c, trace.h
+are copyright:
+
+ * Copyright (c) 1997, 2002 The NetBSD Foundation, Inc.
+   This code is derived from software contributed to The NetBSD Foundation
+   by Klaus Klein and Jason R. Thorpe.
+ * Copyright (c) 2009 The NetBSD Foundation, Inc.
+ * Copyright (c) 2009-2010, Juniper Networks, Inc.
+   Portions Copyright (c) 2009, John Birrell.
+
+and are covered by the BSD-2 license as follows:
+
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE NETBSD FOUNDATION, INC. AND CONTRIBUTORS
+ * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+ * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR CONTRIBUTORS
+ * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+
+File strlcpy.c is copyright:
+
+ * Copyright (c) 1998 Todd C. Miller <Todd.Miller@courtesan.com>
+
+and is covered by ISC license as follows:
+
+ * Permission to use, copy, modify, and distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND TODD C. MILLER DISCLAIMS ALL
+ * WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL TODD C. MILLER BE LIABLE
+ * FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION
+ * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
+ * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+
+Debhelper module bmake.pm is derived from files included within Debhelper
+itself, and distributed under the same license as Debhelper, which is GPL-2+.
+On Debian systems, the complete text of the GNU General
+Public License can be found in /usr/share/common-licenses/GPL-2.

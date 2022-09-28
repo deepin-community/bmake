@@ -1,0 +1,19 @@
+Using bmake with debhelper
+==========================
+
+bmake package ships a bmake.pm debhelper plug-in, which makes it possible
+to build bmake-based package with a simple debian/rules file:
+
+%:
+	dh $@ --buildsystem=bmake
+
+This automatically calls cleandir on dh_auto_clean and install on
+dh_auto_install, and also automatically detects configure script
+and runs it if needed.
+
+The bmake plug-in automatically switches to the NetBSD makefiles if it
+detects .include <bsd.*> in the Makefile. If the automatic detection
+fails for some reason, you can force it by using a pmake plugin instead:
+
+%:
+	dh $@ --buildsystem=pmake

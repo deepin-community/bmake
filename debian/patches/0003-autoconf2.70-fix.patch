@@ -1,0 +1,55 @@
+From: Boyuan Yang <byang@debian.org>
+Date: Thu, 30 Sep 2021 16:07:03 -0400
+Subject: autoconf2.70 fix
+
+---
+ configure.in | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
+
+diff --git a/configure.in b/configure.in
+index 5b45329..c945a96 100644
+--- a/configure.in
++++ b/configure.in
+@@ -122,17 +122,16 @@ if test $bmake_path_max -gt 1024; then
+    bmake_path_max=1024
+ fi
+ echo "Using: BMAKE_PATH_MAX=$bmake_path_max" >&6
+-AC_SUBST(bmake_path_max)dnl
++AC_SUBST([bmake_path_max])dnl
+ dnl
+ dnl AC_C_CROSS
+ dnl
+ 
+ dnl Checks for header files.
+-AC_INCLUDES_DEFAULT
+ AC_HEADER_SYS_WAIT
+ AC_HEADER_DIRENT
+ dnl Keep this list sorted
+-AC_CHECK_HEADERS(sys/param.h)
++AC_CHECK_HEADERS([sys/param.h])
+ dnl On BSDi at least we really need sys/param.h for sys/sysctl.h
+ AC_CHECK_HEADERS([sys/sysctl.h], [], [],
+ [#ifdef HAVE_SYS_PARAM_H
+@@ -161,17 +160,17 @@ dnl Both *BSD and Linux have sys/cdefs.h, most do not.
+ dnl If it is missing, we add -I${srcdir}/missing to CFLAGS
+ dnl also if sys/cdefs.h does not have __RCSID we need to use ours
+ dnl but we need to include the host's one too *sigh*
+-AC_CHECK_HEADER(sys/cdefs.h,
+-echo $ECHO_N "checking whether sys/cdefs.h is compatible... $ECHO_C" >&6
++AC_CHECK_HEADER([sys/cdefs.h],
++[echo $ECHO_N "checking whether sys/cdefs.h is compatible... $ECHO_C" >&6
+ AC_EGREP_CPP(yes,
+ [#include <sys/cdefs.h>
+ #ifdef __RCSID
+ yes
+ #endif
+ ],
+-echo yes  >&6,
+-echo no  >&6; CPPFLAGS="${CPPFLAGS} -I`cd ${srcdir}/missing && pwd` -DNEED_HOST_CDEFS_H"),
+-CPPFLAGS="${CPPFLAGS} -I`cd ${srcdir}/missing && pwd`")
++[echo yes  >&6,
++echo no  >&6; CPPFLAGS="${CPPFLAGS} -I`cd ${srcdir}/missing && pwd` -DNEED_HOST_CDEFS_H"])],
++[CPPFLAGS="${CPPFLAGS} -I`cd ${srcdir}/missing && pwd`"])
+ 
+ dnl Checks for typedefs, structures, and compiler characteristics.
+ AC_C___ATTRIBUTE__

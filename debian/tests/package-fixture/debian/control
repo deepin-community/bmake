@@ -1,0 +1,10 @@
+Source: package-fixture
+Section: devel
+Maintainer: nobody
+Build-Depends:
+  debhelper-compat (= 13),
+  bmake
+
+Package: package-fixture
+Architecture: all
+Description: none

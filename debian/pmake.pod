@@ -1,0 +1,37 @@
+=head1 NAME
+
+pmake - wrapper for bmake defaulting to NetBSD makefiles
+
+=head1 SYNOPSIS
+
+B<pmake> [I<bmake options>] [I<variable=value>] [I<target...>]
+
+=head1 DESCRIPTION
+
+B<pmake> is a wrapper for B<bmake>, a portable version of NetBSD B<make>, providing
+NetBSD system makefiles by default instead of the bmake's own ones.
+
+The B<pmake> wrapper is meant to be used by makefiles relying on B<bsd.prog.mk> and
+other makefiles provided on BSD systems by default.
+
+=head1 FILES
+
+=over
+
+=item /usr/share/bmake/mk-bmake
+
+bmake's makefiles
+
+=item /usr/share/bmake/mk-netbsd
+
+NetBSD makefiles
+
+=item /usr/share/mk
+
+bmake's "system" makefile directory; a symlink to bmake's makefiles
+
+=back
+
+=head1 SEE ALSO
+
+L<bmake(1)>

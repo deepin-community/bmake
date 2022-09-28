@@ -1,0 +1,16 @@
+bmake (20200710-6) unstable; urgency=medium
+
+  To use bmake with NetBSD mk files, it is now possible to use the pmake
+  wrapper, which defaults to /usr/share/bmake/mk-netbsd instead of
+  bmake mk files. The debhelper plugin will automatically detect the use
+  of <bsd.*.mk> and switch to pmake.
+
+ -- Andrej Shadura <andrewsh@debian.org>  Sun, 31 Jan 2021 17:05:50 +0100
+
+bmake (20200710-1) unstable; urgency=medium
+
+  From this version on, NetBSD mk files are no longer used by default.
+  These files are still shipped in /usr/share/bmake/mk-netbsd, but
+  the bmake mk files are used by default.
+
+ -- Andrej Shadura <andrewsh@debian.org>  Fri, 24 Jul 2020 21:06:37 +0200

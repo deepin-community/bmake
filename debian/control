@@ -1,0 +1,24 @@
+Source: bmake
+Section: devel
+Priority: optional
+Maintainer: Andrej Shadura <andrewsh@debian.org>
+Standards-Version: 4.5.0
+Build-Depends: debhelper-compat (= 12), groff
+Homepage: http://www.crufty.net/help/sjg/bmake.html
+Vcs-Browser: https://salsa.debian.org/debian/bmake
+Vcs-Git: https://salsa.debian.org/debian/bmake.git
+
+Package: bmake
+Architecture: any
+Multi-Arch: foreign
+Replaces: pmake
+Provides: pmake
+Breaks: pmake (<< 20200710-2)
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: NetBSD make
+ bmake is a program designed to simplify the maintenance of other
+ programs. Its input is a list of specifications as to the files upon
+ which programs and other files depend.  mkdep, a program to construct
+ Makefile dependency lists, is also included.
+ .
+ bmake is a port of the NetBSD make tool.

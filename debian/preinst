@@ -1,0 +1,51 @@
+#!/bin/sh
+
+set -e
+
+if [ "$1" = upgrade ] &&
+   [   -d /usr/share/mk ] &&
+   [ ! -L /usr/share/mk ] &&
+    dpkg --compare-versions "$2" le 20200710-4
+then
+    if [ -f /usr/share/mk/bsd.sys.mk ]
+    then
+        echo "Found a NetBSD /usr/share/mk directory, moving aside." >&2
+        mkdir -m 755 -p /usr/share/bmake/mk-netbsd
+        mv \
+            /usr/share/mk/bsd.*.mk \
+            /usr/share/mk/sys.mk \
+            /usr/share/bmake/mk-netbsd
+        for f in \
+            /usr/share/mk/Makefile \
+            /usr/share/mk/stage-install.sh
+        do
+            [ ! -f "$f" ] || mv "$f" /usr/share/bmake/mk-netbsd
+        done
+    fi
+    mkdir -m 755 -p /usr/share/bmake/mk-bmake
+    if ! rmdir /usr/share/mk 2>/dev/null
+    then
+        echo "Found extra files in /usr/share/mk directory, migrating over." >&2
+        mv /usr/share/mk/* /usr/share/bmake/mk-bmake
+        rmdir /usr/share/mk
+    fi
+    ln -srT /usr/share/bmake/mk-bmake /usr/share/mk
+fi
+
+if [ "$1" = upgrade ] &&
+   [ ! -L /usr/share/mk ] &&
+   [ ! -f /usr/share/mk/sys.mk ] &&
+    dpkg --compare-versions "$2" le 20200710-5
+then
+    if rmdir /usr/share/mk 2>/dev/null
+    then
+        echo "Found an empty /usr/share/mk directory, fixing" >&2
+        ln -srT /usr/share/bmake/mk-bmake /usr/share/mk
+    else
+        echo "Found a broken /usr/share/mk directory, unable to fix." >&2
+        echo "bmake will not be able to find sys.mk" >&2
+    fi
+
+fi
+
+#DEBHELPER#

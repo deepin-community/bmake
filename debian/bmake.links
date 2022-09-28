@@ -1,0 +1,2 @@
+/usr/share/bmake/mk-bmake /usr/share/mk
+/usr/share/bmake/mk-bmake/sys/Linux.mk /usr/share/bmake/mk-bmake/sys/debian.mk

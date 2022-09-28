@@ -1,0 +1,5 @@
+#!/bin/sh
+
+: ${testdir:=$PWD/debian/tests}
+
+pmake -f $testdir/Makefile.pmake sanity

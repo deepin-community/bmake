@@ -1,0 +1,144 @@
+From: Guillem Jover <guillem@debian.org>
+
+Multiarch support.
+
+The pmake system makefiles hardcode several standard library paths,
+which will make other programs break due to those being located in
+a different place on multiarch.
+---
+ Makefile.boot |  5 ++++-
+ arch.c        |  9 ---------
+ bmake.1       |  1 +
+ main.c        | 31 +++++++++++++++++++++++++++++--
+ 4 files changed, 34 insertions(+), 12 deletions(-)
+
+diff --git a/arch.c b/arch.c
+index 9db7ce2..43c79d4 100644
+--- a/arch.c
++++ b/arch.c
+@@ -165,15 +165,6 @@ struct ar_hdr {
+ #include    "hash.h"
+ #include    "dir.h"
+ 
+-#ifdef TARGET_MACHINE
+-#undef MAKE_MACHINE
+-#define MAKE_MACHINE TARGET_MACHINE
+-#endif
+-#ifdef TARGET_MACHINE_ARCH
+-#undef MAKE_MACHINE_ARCH
+-#define MAKE_MACHINE_ARCH TARGET_MACHINE_ARCH
+-#endif
+-
+ static Lst	  archives;   /* Lst of archives we've already examined */
+ 
+ typedef struct Arch {
+diff --git a/bmake.1 b/bmake.1
+index c468cfe..8fa7c7f 100644
+--- a/bmake.1
++++ b/bmake.1
+@@ -2293,6 +2293,7 @@ Example:
+ uses the following environment variables, if they exist:
+ .Ev MACHINE ,
+ .Ev MACHINE_ARCH ,
++.Ev MACHINE_MULTIARCH ,
+ .Ev MAKE ,
+ .Ev MAKEFLAGS ,
+ .Ev MAKEOBJDIR ,
+diff --git a/main.c b/main.c
+index 2514162..922441e 100644
+--- a/main.c
++++ b/main.c
+@@ -151,6 +151,19 @@ __RCSID("$NetBSD: main.c,v 1.279 2020/07/03 08:13:23 rillig Exp $");
+ # define __arraycount(__x)	(sizeof(__x) / sizeof(__x[0]))
+ #endif
+ 
++#ifdef TARGET_MACHINE
++#undef MAKE_MACHINE
++#define MAKE_MACHINE TARGET_MACHINE
++#endif
++#ifdef TARGET_MACHINE_ARCH
++#undef MAKE_MACHINE_ARCH
++#define MAKE_MACHINE_ARCH TARGET_MACHINE_ARCH
++#endif
++#ifdef TARGET_MACHINE_MULTIARCH
++#undef MAKE_MACHINE_MULTIARCH
++#define MAKE_MACHINE_MULTIARCH TARGET_MACHINE_MULTIARCH
++#endif
++
+ Lst			create;		/* Targets to be made */
+ time_t			now;		/* Time at start of make */
+ GNode			*DEFAULT;	/* .DEFAULT node */
+@@ -996,6 +1009,7 @@ main(int argc, char **argv)
+     	const char *machine = getenv("MACHINE");
+ #endif
+ 	const char *machine_arch = getenv("MACHINE_ARCH");
++	const char *machine_multiarch = getenv("MACHINE_MULTIARCH");
+ 	char *syspath = getenv("MAKESYSPATH");
+ 	Lst sysMkPath;			/* Path of sys.mk */
+ 	char *cp = NULL, *start;
+@@ -1047,8 +1061,8 @@ main(int argc, char **argv)
+ 	 * so we can share an executable for similar machines.
+ 	 * (i.e. m68k: amiga hp300, mac68k, sun3, ...)
+ 	 *
+-	 * Note that both MACHINE and MACHINE_ARCH are decided at
+-	 * run-time.
++	 * Note that all of MACHINE, MACHINE_ARCH and MACHINE_MULTIARCH
++	 * are decided at run-time.
+ 	 */
+ 	if (!machine) {
+ #ifdef MAKE_NATIVE
+@@ -1091,6 +1105,18 @@ main(int argc, char **argv)
+ 
+ 	myPid = getpid();		/* remember this for vFork() */
+ 
++	if (!machine_multiarch) {
++#ifndef MACHINE_MULTIARCH
++#ifdef MAKE_MACHINE_MULTIARCH
++	    machine_multiarch = MAKE_MACHINE_MULTIARCH;
++#else
++	    machine_multiarch = "unknown-unknown-unknown";
++#endif
++#else
++	    machine_multiarch = MACHINE_MULTIARCH;
++#endif
++	}
++
+ 	/*
+ 	 * Just in case MAKEOBJDIR wants us to do something tricky.
+ 	 */
+@@ -1099,6 +1125,7 @@ main(int argc, char **argv)
+ 	Var_Set(".MAKE.OS", utsname.sysname, VAR_GLOBAL);
+ 	Var_Set("MACHINE", machine, VAR_GLOBAL);
+ 	Var_Set("MACHINE_ARCH", machine_arch, VAR_GLOBAL);
++	Var_Set("MACHINE_MULTIARCH", machine_multiarch, VAR_GLOBAL);
+ #ifdef MAKE_VERSION
+ 	Var_Set("MAKE_VERSION", MAKE_VERSION, VAR_GLOBAL);
+ #endif
+diff --git a/Makefile.boot b/Makefile.boot
+index 0ba0c88..186c314 100644
+--- a/Makefile.boot
++++ b/Makefile.boot
+@@ -4,7 +4,8 @@
+ #
+ # You only want to use this if you aren't running NetBSD.
+ #
+-# modify MACHINE and MACHINE_ARCH as appropriate for your target architecture
++# modify MACHINE, MACHINE_ARCH and MACHINE_MULTIARCH as appropriate for
++# your target architecture
+ #
+ CC=gcc -O -g
+ 
+@@ -15,11 +16,13 @@ CC=gcc -O -g
+ 
+ MACHINE=i386
+ MACHINE_ARCH=i386
++MACHINE_MULTIARCH=i386-linux-gnu
+ # tested on HP-UX 10.20
+ #MAKE_MACHINE=hp700
+ #MAKE_MACHINE_ARCH=hppa
+ CFLAGS= -DTARGET_MACHINE=\"${MACHINE}\" \
+ 	-DTARGET_MACHINE_ARCH=\"${MACHINE_ARCH}\" \
++	-DTARGET_MACHINE_MULTIARCH=\"${MACHINE_MULTIARCH}\" \
+ 	-DMAKE_MACHINE=\"${MACHINE}\"
+ LIBS=
+ 

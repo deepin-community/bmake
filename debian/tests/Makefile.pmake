@@ -1,0 +1,5 @@
+.include <bsd.prog.mk>
+
+sanity:
+	[ "${unix}" = "We run Debian" ]
+	[ "${DOCDIR}" = /usr/share/doc ]

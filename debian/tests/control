@@ -1,0 +1,15 @@
+Tests: smoke
+Depends: bmake
+Restrictions: allow-stderr, superficial
+
+Tests: test-bmake
+Depends: bmake
+Restrictions: allow-stderr
+
+Tests: test-pmake
+Depends: bmake
+Restrictions: allow-stderr
+
+Tests: test-pmake-makeflags
+Depends: bmake, debhelper
+Restrictions: allow-stderr

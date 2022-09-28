@@ -1,0 +1,52 @@
+#!/usr/bin/make -f
+
+#export DH_VERBOSE=1
+
+include /usr/share/dpkg/architecture.mk
+
+ARCH=$(patsubst mips,mipseb,$(DEB_HOST_ARCH_CPU))
+MULTIARCH=$(DEB_HOST_MULTIARCH)
+MAKE_VERSION=$(shell sed -n -e '/MAKE_VERSION=[^0-9]*[0-9]/s,.*=[^0-9]*,,p' Makefile VERSION)
+CFLAGS=$(shell dpkg-buildflags --get CFLAGS) \
+	-D__COPYRIGHT\(x\)= -D__RCSID\(x\)= \
+	-I. -DMACHINE=\\\"debian\\\" -DMACHINE_ARCH=\\\"${ARCH}\\\" \
+	-DMACHINE_MULTIARCH=\\\"${MULTIARCH}\\\" \
+	-DHAVE_CONFIG_H -DNEED_HOST_CDEFS_H -DMAKE_NATIVE \
+	-DUSE_META -D_PATH_DEFSYSPATH=\\\"/usr/share/mk\\\" \
+	-DMAKE_VERSION=\\\"${MAKE_VERSION}\\\" \
+	-Wno-unused
+
+ifeq ($(DEB_BUILD_GNU_TYPE),$(DEB_HOST_GNU_TYPE))
+CROSS :=
+else
+CROSS := CC=$(DEB_HOST_GNU_TYPE)-gcc
+endif
+
+debian/pmake.1: debian/pmake.pod
+	pod2man -r "" -c "" -n $(shell echo $(notdir $(@:%.1=%)) | tr a-z A-Z) $< > $@
+
+%:
+	dh $@
+
+override_dh_auto_configure:
+	@[ -n "$(MAKE_VERSION)" ] || ( echo MAKE_VERSION not defined && exit 1 )
+	dh_auto_configure -- --with-machine=debian
+
+override_dh_auto_build:
+	$(MAKE) -f Makefile.boot CFLAGS="$(CFLAGS)" $(CROSS)
+
+override_dh_auto_test:
+
+override_dh_auto_clean:
+	$(MAKE) -f Makefile.boot clean
+
+execute_before_dh_install:
+	groff -Tascii -ms PSD.doc/tutorial.ms > \
+	      PSD.doc/tutorial.asc
+	groff -Tps -ms PSD.doc/tutorial.ms > \
+	      PSD.doc/tutorial.ps
+	MKFILES=$$(sed -n -e '/SKIP_BSD_MK.*then/,+1 { /for/ {s/.*for f in //;p} }' mk/install-mk); \
+	cd mk; for f in $$MKFILES; \
+	do ln -s $$f.mk bsd.$$f.mk; done
+
+.PHONY: override_dh_auto_configure override_dh_auto_build override_dh_auto_test override_dh_auto_clean override_dh_auto_install

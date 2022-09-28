@@ -1,0 +1,5 @@
+#!/bin/sh
+
+BMAKE=${PMAKE_BMAKE-bmake}
+
+exec $BMAKE -m /usr/share/bmake/mk-netbsd "$@"
